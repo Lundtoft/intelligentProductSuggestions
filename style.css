@@ -1,0 +1,76 @@
+@font-face {
+  font-family: 'HelveticaNeue-Bold';
+  src: url(fonts/HelveticaNeue-Bold.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'HelveticaNeue-Medium';
+  src: url(fonts/HelveticaNeue-Medium.otf) format('opentype');
+}
+
+body{
+  font-family: 'HelveticaNeue-Medium';
+  font-size: 20pt;
+  overflow: hidden;
+  background: #fff;
+  color: #000;
+}
+
+#screen{
+  padding: 20px;
+}
+
+#title{
+  text-transform: uppercase;
+}
+
+#title h2{
+  margin: 0;
+  font-family: 'HelveticaNeue-Bold';
+}
+
+#price{
+  position: fixed;
+  width: 100%;
+}
+
+#price .digit{
+  font-size: 80pt;
+  position: fixed;
+  background: #fff;
+  height: 300px;
+  top: 110px;
+  right: 0px;
+  padding-right: 20px;
+}
+
+#price h1{
+  top: 80px;
+  font-size: 180pt;
+  margin: 0;
+  position: fixed;
+  right: -50px;
+  font-family: 'HelveticaNeue-Bold';
+}
+
+#amount{
+  font-family: 'HelveticaNeue-Bold';
+  font-size: 20pt;
+}
+
+#symbols{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+}
+
+#symbols img{
+  width: 100px;
+  padding-left: 10px;
+}
+
+#barcode{
+  position: fixed;
+  bottom: 5px;
+}

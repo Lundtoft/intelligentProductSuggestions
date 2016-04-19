@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Screen</title>
+  </head>
+  <body>
+
+    <div id="screen">
+      <div id="title">
+        <h2>Firerkost</h2>
+        <span id="type">Finax</span>
+      </div>
+      <div id="price">
+        <h1>25 s<span class="digit">95</span></h1>
+      </div>
+      <div id="amount">
+        <h2>1 KG</h2>
+      </div>
+      <img id="barcode">
+      <div id="symbols">
+      </div>
+    </div>
+
+    <script src="jquery.min.js"></script>
+    <script src="JsBarcode.min.js"></script>
+    <script type="text/javascript">
+      var product = getUrlVars()["product"];
+
+
+
+      $.get('/products/57162e4ca9ced45b6cf2cdf2', function(data) {
+        $('#title h2').html(data.name);
+        $('#type').html(data.type);
+        $('#amount h2').html(data.volume+' GR');
+
+        price = data.price.toString().split('.');
+        if(price.length > 1){
+          if(price[1].length < 2){
+            price[1] = price[1]+'0';
+          }
+        }else{
+          price[1] = '00';
+        }
+
+        $('#price h1').html(price[0]+' s<span class="digit">'+price[1]+'</span>');
+
+        if(data.values){
+          for (var i = 0; i < data.values.length; i++) {
+            $('#symbols').append('<img src="assets/'+data.values[i]+'.png" alt="" />');
+          }
+        }
+
+        JsBarcode("#barcode", data.ean, {
+            width:3,
+            height:50,
+            displayValue: true,
+            //lineColor: "#FFFFFF",
+            //background: "#000000"
+          });
+
+      });
+
+      function getUrlVars() {
+        var vars = {};
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+          vars[key] = value;
+        });
+        return vars;
+      }
+
+    </script>
+  </body>
+</html>
