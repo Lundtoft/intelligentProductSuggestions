@@ -30,7 +30,7 @@
 
 
 
-      $.get('/products/57162e4ca9ced45b6cf2cdf2', function(data) {
+      $.get('/products/'+product, function(data) {
         $('#title h2').html(data.name);
         $('#type').html(data.type);
         $('#amount h2').html(data.volume+' GR');

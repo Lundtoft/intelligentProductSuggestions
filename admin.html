@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Admin</title>
+    <style media="screen">
+
+      body{
+        font-family: sans-serif;
+      }
+
+      table{
+        display: inline-block;
+        text-align: center;
+        border-collapse: collapse;
+        margin-right: 20px;
+      }
+
+      td{
+        padding: 5px;
+        border: 10px solid #ccc;
+      }
+
+      img{
+        height: 100px;
+      }
+
+      img:hover{
+        cursor: pointer;
+      }
+
+    </style>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th colspan="3">REOL 1</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="3"><img src="assets/products/57162e4ca9ced45b6cf2ce00.jpg" alt=""></td>
+        </tr>
+        <tr>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2ce05.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2ce01.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2ce08.jpg" alt=""></td>
+        </tr>
+        <tr>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2ce09.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2ce07.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2ce03.jpg" alt=""></td>
+        </tr>
+        <tr>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2ce02.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2ce05.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2ce06.jpg" alt=""></td>
+        </tr>
+        <tr>
+          <td colspan="2"><img src="assets/products/57162e4ca9ced45b6cf2cdff.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdfe.jpg" alt=""></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table>
+      <thead>
+        <tr>
+          <th colspan="3">REOL 2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdf1.jpg" alt=""></td>
+          <td colspan="2"><img src="assets/products/57162e4ca9ced45b6cf2cdf2.jpg" alt=""></td>
+        </tr>
+        <tr>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdf8.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdf3.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdf4.jpg" alt=""></td>
+        </tr>
+        <tr>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdf5.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdf6.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdf7.jpg" alt=""></td>
+        </tr>
+        <tr>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdf9.jpg" alt=""></td>
+          <td colspan="2"><img src="assets/products/57162e4ca9ced45b6cf2cdfa.jpg" alt=""></td>
+        </tr>
+        <tr>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdfb.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdfc.jpg" alt=""></td>
+          <td><img src="assets/products/57162e4ca9ced45b6cf2cdfd.jpg" alt=""></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script src="jquery.min.js"></script>
+    <script type="text/javascript">
+      $('img').click(function(){
+        id = $(this).attr('src').substring(16,40);
+        alert(id);
+
+      });
+    </script>
+
+  </body>
+</html>
