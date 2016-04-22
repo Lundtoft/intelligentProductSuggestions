@@ -32,7 +32,8 @@
       var socket = io();
 
       socket.on(product, function(data){
-        $('body').css('background', '#00ff00');
+        console.log(data)
+        $('body').css('background', '#ff0000');
       });
 
       $.get('/products/'+product, function(data) {

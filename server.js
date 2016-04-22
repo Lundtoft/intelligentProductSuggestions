@@ -35,13 +35,13 @@ server.get('/products/:id', function (req , res, next){
 
 server.post('/suggenstions/:id/:productType', function (req , res, next){
   values = req.params.values;
-
+  id = req.params.id;
   productType = req.params.productType;
 
   //Fix input array
   for (var i = 0; i < values.length; i++) {
-    if(values[i].name == 'oko' || values[i].name == 'price'){
-      values[i] = values[i].name;
+    if(values[i].name == 'data.oko' || values[i].name == 'data.price'){
+      values[i] = values[i].name.substring(5,values[i].length);
     }
     values[i].sort = parseInt(values[i].sort);
   }
@@ -86,6 +86,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
     ], function(err, doc){
       if(doc.length > 0){
         console.log(doc);
+        screenSend(id, doc[0], 'oko+price');
         res.send(200, doc);
         res.end();
       }else{
@@ -99,6 +100,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
       { "$limit" : 1}
       ], function(err, doc){
           console.log(doc);
+          screenSend(id, doc[0], 'nooko+price');
           res.send(200, doc);
           res.end();
         });
@@ -125,7 +127,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
       products.find({"values" : "oko", "type" : productType}).sort(sortobj).limit(1, function(err, doc) {
         if(doc.length > 0){
           console.log(doc);
-          io.emit(doc[0]._id, 'oko');
+          screenSend(id, doc[0], 'oko');
           res.send(200, doc);
           res.end();
         }else{
@@ -134,6 +136,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
           /////////////////////////////////////////////////
           products.find({"type" : productType}).sort(sortobj).limit(1, function(err, doc) {
             console.log(doc);
+            screenSend(id, doc[0], 'nooko');
             res.send(200, doc);
             res.end();
           });
@@ -173,6 +176,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
     { "$sort" :  sortobj },
     { "$limit" : 1}
     ], function(err, doc){
+      screenSend(id, doc[0], 'price');
       console.log(doc);
       res.send(200, doc);
       res.end();
@@ -199,6 +203,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
 
       products.find({"type" : productType}).sort(sortobj).limit(1, function(err, doc) {
         console.log(doc);
+        screenSend(id, doc[0], 'regular');
         res.send(200, doc);
         res.end();
       });
@@ -216,3 +221,9 @@ server.get('/.*/', restify.serveStatic({
 server.listen(port, function (){
   console.log('%s listening at %s', server.name, port)
 });
+
+
+function screenSend(id, alternativProduct, why){
+  console.log(why);
+    io.emit(alternativProduct._id, why);
+}

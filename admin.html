@@ -174,7 +174,7 @@
       $('input[type="radio"]').click(function(){
         value = $(this).val();
         name = $(this).attr('name');
-        productValues.push({'name': name, 'sort': parseInt(value)});
+        productValues.push({'name': 'data.'+name, 'sort': parseInt(value)});
         console.log(productValues);
       });
 
