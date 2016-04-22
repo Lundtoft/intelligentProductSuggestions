@@ -7,9 +7,11 @@ port = 8080;
 var server = restify.createServer();
 var io = socketio.listen(server.server);
 
+
 var db = mongojs('intelligentProductSuggestions');
 var products = db.collection("products");
 
+server.use(restify.bodyParser());
 
 server.get('/products/', function (req , res, next){
   products.find({}, function(err, doc) {
@@ -31,14 +33,25 @@ server.get('/products/:id', function (req , res, next){
         });
 });
 
-server.get('/suggenstions/:id/:productType', function (req , res, next){
-  // values = req.params.values:
+server.post('/suggenstions/:id/:productType', function (req , res, next){
+  values = req.params.values;
+
   productType = req.params.productType;
-  values = []
-  // values.push("price");
-  values.push("oko");
-  values.push({"name" : "data.salt" , "sort" : -1});
-  values.push({"name" : "data.sukker" , "sort" : 1});
+
+  //Fix input array
+  for (var i = 0; i < values.length; i++) {
+    if(values[i].name == 'oko' || values[i].name == 'price'){
+      values[i] = values[i].name;
+    }
+    values[i].sort = parseInt(values[i].sort);
+  }
+
+  //values = []
+
+  //values.push("oko");
+  //values.push("price");
+  //values.push({"name" : "data.kostfibre" , "sort" : -1});
+  //values.push({"name" : "data.sukker" , "sort" : 1});
 
 
 /////////////////////////////////////////////////
@@ -52,13 +65,14 @@ server.get('/suggenstions/:id/:productType', function (req , res, next){
     /////////////////////////////////////////////////
     if(values.indexOf("price") != -1){
       console.log("oko + pris");
-      values.splice(values.indexOf("price"),1);
-      sort0name = values[0].name;
-      sort0sort = values[0].sort;
-
       sortobj = {};
-      sortobj["pricekg"] = -1;
-      sortobj[sort0name] = sort0sort;
+      if(values.indexOf("price")){
+        sortobj[values[0].name] = values[0].sort;
+        sortobj["pricekg"] = 1;
+      } else{
+        sortobj["pricekg"] = 1;
+        sortobj[values[1].name] = values[1].sort;
+      }
 
       console.log(JSON.stringify(sortobj));
       /////////////////////////////////////////////////
@@ -111,6 +125,7 @@ server.get('/suggenstions/:id/:productType', function (req , res, next){
       products.find({"values" : "oko", "type" : productType}).sort(sortobj).limit(1, function(err, doc) {
         if(doc.length > 0){
           console.log(doc);
+          io.emit(doc[0]._id, 'oko');
           res.send(200, doc);
           res.end();
         }else{
@@ -131,16 +146,22 @@ server.get('/suggenstions/:id/:productType', function (req , res, next){
     /////////////////////////////////////////////////
     if(values.indexOf("price") != -1){
       console.log("pris");
-      values.splice(values.indexOf("price"),1);
-      sort0name = values[0].name;
-      sort0sort = values[0].sort;
-      sort1name = values[1].name;
-      sort1sort = values[1].sort;
 
       sortobj = {};
-      sortobj["pricekg"] = -1;
-      sortobj[sort0name] = sort0sort;
-      sortobj[sort1name] = sort1sort;
+      if(values.indexOf("price") == 0){
+        sortobj["pricekg"] = 1;
+        sortobj[values[1].name] = values[1].sort;
+        sortobj[values[2].name] = values[2].sort;
+      } else if (values.indexOf("price") == 1) {
+        sortobj[values[0].name] = values[0].sort;
+        sortobj["pricekg"] = 1;
+        sortobj[values[2].name] = values[2].sort;
+      } else{
+        sortobj[values[0].name] = values[0].sort;
+        sortobj[values[1].name] = values[1].sort;
+        sortobj["pricekg"] = 1;
+      }
+
 
       console.log(JSON.stringify(sortobj));
       /////////////////////////////////////////////////

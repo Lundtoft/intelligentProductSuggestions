@@ -24,14 +24,22 @@
     </div>
 
     <script src="jquery.min.js"></script>
+    <script src="socket.io.js"></script>
     <script src="JsBarcode.min.js"></script>
     <script type="text/javascript">
       var product = getUrlVars()["product"];
 
+      var socket = io();
 
+      socket.on(product, function(data){
+        $('body').css('background', '#00ff00');
+      });
 
       $.get('/products/'+product, function(data) {
         $('#title h2').html(data.name);
+        if(data.type = 'slik'){
+          data.type = 'Favoritter';
+        }
         $('#type').html(data.type);
         $('#amount h2').html(data.volume+' GR');
 
