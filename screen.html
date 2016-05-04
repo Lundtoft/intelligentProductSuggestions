@@ -9,14 +9,14 @@
 
     <div id="screen">
       <div id="title">
-        <h2>Firerkost</h2>
-        <span id="type">Finax</span>
+        <h2></h2>
+        <span id="type"></span>
       </div>
       <div id="price">
-        <h1>25 s<span class="digit">95</span></h1>
+        <h1><span class="digit"></span></h1>
       </div>
       <div id="amount">
-        <h2>1 KG</h2>
+        <h2></h2>
       </div>
       <img id="barcode">
       <div id="symbols">
@@ -28,17 +28,37 @@
     <script src="JsBarcode.min.js"></script>
     <script type="text/javascript">
       var product = getUrlVars()["product"];
+      var pdata;
 
       var socket = io();
 
       socket.on(product, function(data){
-        console.log(data)
-        $('body').css('background', '#ff0000');
+        JsBarcode("#barcode", pdata.ean, {
+            width:3,
+            height:50,
+            displayValue: true,
+            lineColor: "#FFFFFF",
+            background: "#000000"
+          });
+        $('body').css('background', '#000');
+        $('body').css('color', '#fff');
+        $('.digit').css('background', '#000');
+        setTimeout(function(){
+          $('body').css('background', '#fff');
+          $('body').css('color', '#000');
+          $('.digit').css('background', '#fff');
+          JsBarcode("#barcode", pdata.ean, {
+              width:3,
+              height:50,
+              displayValue: true,
+            });
+        }, 5000);
       });
 
       $.get('/products/'+product, function(data) {
+        pdata = data;
         $('#title h2').html(data.name);
-        if(data.type = 'slik'){
+        if(data.type == 'slik'){
           data.type = 'Favoritter';
         }
         $('#type').html(data.type);
@@ -67,6 +87,11 @@
             displayValue: true,
             //lineColor: "#FFFFFF",
             //background: "#000000"
+          });
+
+          $('#barcode').click(function(){
+            parent.history.back();
+            return false;
           });
 
       });
