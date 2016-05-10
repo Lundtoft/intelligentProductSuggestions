@@ -8,19 +8,34 @@
   <body>
 
     <div id="screen">
-      <div id="title">
+      <div class="title">
         <h2></h2>
-        <span id="type"></span>
+        <span class="type"></span>
       </div>
-      <div id="price">
+      <div class="price">
         <h1><span class="digit"></span></h1>
       </div>
-      <div id="amount">
+      <div class="amount">
         <h2></h2>
       </div>
-      <img id="barcode">
-      <div id="symbols">
+      <img class="barcode">
+        <div class="symbols">
+        </div>
+    </div>
+
+    <div id="screen-alt" class="hidden">
+      <div class="title">
+        <h2></h2>
+        <span class="type"></span>
       </div>
+      <div class="price">
+        <h1><span class="digit"></span></h1>
+      </div>
+      <div class="amount">
+        <h2></h2>
+      </div>
+        <div class="symbols">
+        </div>
     </div>
 
     <script src="jquery.min.js"></script>
@@ -33,7 +48,7 @@
       var socket = io();
 
       socket.on(product, function(data){
-        JsBarcode("#barcode", pdata.ean, {
+        JsBarcode(".barcode", pdata.ean, {
             width:3,
             height:50,
             displayValue: true,
@@ -53,16 +68,38 @@
               displayValue: true,
             });
         }, 5000);
+
+        if(data == 'oko'){
+
+          $('#screen').hide();
+          $('#screen-alt').show();
+
+          //$('#background').css('background', '#fff');
+
+          // $('img[src="assets/oko.png"]').animate({
+          //   width: 400
+          // }, 4000, function(){
+          //   $(this).animate({
+          //     width: 100
+          //   }, 4000, function(){
+          //     $('#background').css('background', 'none');
+          //   });
+          // });
+
+
+
+        }
+
       });
 
       $.get('/products/'+product, function(data) {
         pdata = data;
-        $('#title h2').html(data.name);
+        $('.title h2').html(data.name);
         if(data.type == 'slik'){
           data.type = 'Favoritter';
         }
-        $('#type').html(data.type);
-        $('#amount h2').html(data.volume+' GR');
+        $('.type').html(data.type);
+        $('.amount h2').html(data.volume+' GR');
 
         price = data.price.toString().split('.');
         if(price.length > 1){
@@ -73,15 +110,15 @@
           price[1] = '00';
         }
 
-        $('#price h1').html(price[0]+' s<span class="digit">'+price[1]+'</span>');
+        $('.price h1').html(price[0]+' s<span class="digit">'+price[1]+'</span>');
 
         if(data.values){
           for (var i = 0; i < data.values.length; i++) {
-            $('#symbols').append('<img src="assets/'+data.values[i]+'.png" alt="" />');
+            $('.symbols').append('<img src="assets/'+data.values[i]+'.png" alt="" />');
           }
         }
 
-        JsBarcode("#barcode", data.ean, {
+        JsBarcode(".barcode", data.ean, {
             width:3,
             height:50,
             displayValue: true,
@@ -89,7 +126,7 @@
             //background: "#000000"
           });
 
-          $('#barcode').click(function(){
+          $('.barcode').click(function(){
             parent.history.back();
             return false;
           });

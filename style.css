@@ -16,25 +16,36 @@ body{
   color: #000;
 }
 
-#screen{
+.hidden{
+  display: none;
+}
+
+#background{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+#screen .screen{
   padding: 20px;
 }
 
-#title{
+.title{
   text-transform: uppercase;
 }
 
-#title h2{
+.title h2{
   margin: 0;
   font-family: 'HelveticaNeue-Bold';
 }
 
-#price{
+#screen .price{
   position: fixed;
   width: 100%;
 }
 
-#price .digit{
+#screen .price .digit{
   font-size: 80pt;
   position: fixed;
   background: #fff;
@@ -44,7 +55,7 @@ body{
   padding-right: 20px;
 }
 
-#price h1{
+#screen .price h1{
   top: 80px;
   font-size: 180pt;
   margin: 0;
@@ -53,24 +64,24 @@ body{
   font-family: 'HelveticaNeue-Bold';
 }
 
-#amount{
+#screen .amount{
   font-family: 'HelveticaNeue-Bold';
   font-size: 20pt;
 }
 
-#symbols{
+#screen .symbols{
   position: fixed;
   bottom: 20px;
   right: 20px;
 
 }
 
-#symbols img{
+#screen .symbols img{
   width: 100px;
   padding-left: 10px;
 }
 
-#barcode{
+#screen .barcode{
   position: fixed;
   bottom: 5px;
 }
