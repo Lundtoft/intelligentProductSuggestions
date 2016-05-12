@@ -126,7 +126,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
     ], function(err, doc){
       if(doc.length > 0){
         console.log(doc);
-        screenSend(id, doc[0], 'oko+price');
+        screenSend(id, doc[0], sortobj);
         res.send(200, doc);
         res.end();
       }else{
@@ -140,7 +140,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
       { "$limit" : 1}
       ], function(err, doc){
           console.log(doc);
-          screenSend(id, doc[0], 'nooko+price');
+          screenSend(id, doc[0], sortobj);
           res.send(200, doc);
           res.end();
         });
@@ -167,7 +167,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
       products.find({"values" : "oko", "type" : productType}).sort(sortobj).limit(1, function(err, doc) {
         if(doc.length > 0){
           console.log(doc);
-          screenSend(id, doc[0], 'oko');
+          screenSend(id, doc[0], sortobj);
           res.send(200, doc);
           res.end();
         }else{
@@ -176,7 +176,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
           /////////////////////////////////////////////////
           products.find({"type" : productType}).sort(sortobj).limit(1, function(err, doc) {
             console.log(doc);
-            screenSend(id, doc[0], 'nooko');
+            screenSend(id, doc[0], sortobj);
             res.send(200, doc);
             res.end();
           });
@@ -216,7 +216,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
     { "$sort" :  sortobj },
     { "$limit" : 1}
     ], function(err, doc){
-      screenSend(id, doc[0], 'price');
+      screenSend(id, doc[0], sortobj);
       console.log(doc);
       res.send(200, doc);
       res.end();
@@ -243,7 +243,7 @@ server.post('/suggenstions/:id/:productType', function (req , res, next){
 
       products.find({"type" : productType}).sort(sortobj).limit(1, function(err, doc) {
         console.log(doc);
-        screenSend(id, doc[0], 'regular');
+        screenSend(id, doc[0], sortobj);
         res.send(200, doc);
         res.end();
       });
@@ -263,11 +263,18 @@ server.listen(port, function (){
 });
 
 function screenSend(id, alternativProduct, why){
-  console.log(why);
-    io.emit(alternativProduct._id, why);
+  //console.log(why);
+  console.log(id +' vs. '+alternativProduct._id);
+  orginal = findPos(id);
+  alternativProduct = findPos(alternativProduct._id);
+  console.log(orginal.x+', '+orginal.y+' -> '+alternativProduct.x+', '+alternativProduct.y);
+  sendPath(orginal.x, orginal.y, alternativProduct.x, alternativProduct.y, why);
+    //io.emit(alternativProduct._id, why);
 }
 
-function sendPath(x1, y1, x2, y2){
+function sendPath(x1, y1, x2, y2, why){
+  obj = {};
+  obj.reasen = why;
   if (x1 < x2) {
     for (var i = x1; i < position.length; i++) {
       if(i == x2){
@@ -275,25 +282,25 @@ function sendPath(x1, y1, x2, y2){
         if (y1 < y2) {
           for (var k = y1; k < position[i].length; k++) {
             if(k == y2){
-              if(position[i][k] != 'x'){console.log('done ' + position[i][k]);}
+              if(position[i][k] != 'x'){ obj.direction = 'done';io.emit(position[i][k], obj);}
               break;
             }
-            if(position[i][k] != 'x'){console.log(position[i][k]);}
+            if(position[i][k] != 'x'){obj.direction = 'right';io.emit(position[i][k], obj);}
           }
           break;
         }else{
           for (var k = y1; k > 0; k-- ){
             if(k == y2){
-              if(position[i][k] != 'x'){console.log('done ' + position[i][k]);}
+              if(position[i][k] != 'x'){obj.direction = 'done';io.emit(position[i][k], obj);}
               break;
             }
-            if(position[i][k] != 'x'){console.log(position[i][k]);}
+            if(position[i][k] != 'x'){obj.direction = 'left';io.emit(position[i][k], obj);}
           }
           break;
         }
 
       }
-      if(position[i][y1] != 'x'){console.log(position[i][y1]);}
+      if(position[i][y1] != 'x'){obj.direction = 'down';io.emit(position[i][k], obj);}
     }
   }else{
     for (var i = x1; i > 0; i-- ){
@@ -302,26 +309,35 @@ function sendPath(x1, y1, x2, y2){
         if (y1 < y2) {
           for (var k = y1; k < position[i].length; k++) {
             if(k == y2){
-              if(position[i][k] != 'x'){console.log('done ' + position[i][k]);}
+              if(position[i][k] != 'x'){obj.direction = 'done';io.emit(position[i][k], obj);}
               break;
             }
-            if(position[i][k] != 'x'){console.log(position[i][k]);}
+            if(position[i][k] != 'x'){obj.direction = 'right';io.emit(position[i][k], obj);}
           }
           break;
         }else{
           for (var k = y1; k > 0; k-- ){
             if(k == y2){
-              if(position[i][k] != 'x'){console.log('done ' + position[i][k]);}
+              if(position[i][k] != 'x'){obj.direction = 'done';io.emit(position[i][k], obj);}
               break;
             }
-            if(position[i][k] != 'x'){console.log(position[i][k]);}
+            if(position[i][k] != 'x'){obj.direction = 'left';io.emit(position[i][k], obj);}
           }
           break;
         }
 
 
       }
-      if(position[i][y1] != 'x'){console.log(position[i][y1]);}
+      if(position[i][y1] != 'x'){obj.direction = 'up';io.emit(position[i][k], obj);}
     }
   }
+}
+
+function findPos(id){
+  for (var i = 1; i < position.length; i++) {
+    for (var k = 1; k < position[i].length; k++) {
+      if (id == position[i][k]){posX = i;posY = k; break;}
+    }
+  }
+  return { x : posX, y : posY };
 }
