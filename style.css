@@ -35,6 +35,35 @@ body{
   text-transform: uppercase;
 }
 
+img.left{
+  transform: rotate(180deg);
+}
+
+img.up{
+  transform: rotate(270deg);
+}
+
+img.down{
+  transform: rotate(90deg);
+}
+
+img.arrow{
+  width: 50%;
+}
+
+#screen-alt .product-img{
+  float: left;
+  margin-right: 50px;
+}
+
+#screen-alt h1{
+  text-transform: uppercase;
+}
+
+#screen-alt .logo{
+  width: 100px;
+}
+
 .title h2{
   margin: 0;
   font-family: 'HelveticaNeue-Bold';

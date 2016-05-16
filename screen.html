@@ -24,18 +24,7 @@
     </div>
 
     <div id="screen-alt" class="hidden">
-      <div class="title">
-        <h2></h2>
-        <span class="type"></span>
-      </div>
-      <div class="price">
-        <h1><span class="digit"></span></h1>
-      </div>
-      <div class="amount">
-        <h2></h2>
-      </div>
-        <div class="symbols">
-        </div>
+
     </div>
 
     <script src="jquery.min.js"></script>
@@ -47,48 +36,59 @@
 
       var socket = io();
 
-      socket.on(product, function(data){
-        JsBarcode(".barcode", pdata.ean, {
-            width:3,
-            height:50,
-            displayValue: true,
-            lineColor: "#FFFFFF",
-            background: "#000000"
-          });
-        $('body').css('background', '#000');
-        $('body').css('color', '#fff');
-        $('.digit').css('background', '#000');
-        setTimeout(function(){
-          $('body').css('background', '#fff');
-          $('body').css('color', '#000');
-          $('.digit').css('background', '#fff');
-          JsBarcode("#barcode", pdata.ean, {
-              width:3,
-              height:50,
-              displayValue: true,
-            });
-        }, 5000);
+      socket.on('update', function(data){
+        location.reload();
+      });
 
-        if(data == 'oko'){
+      socket.on(product, function(data){
+
+        if(data.direction == 'done'){
+
+          $('body').css('background', '#000');
+          
+          $('#screen-alt').html('<img src="assets/products/'+product+'.jpg" class="product-img" />').css('margin', '50px');
+
+          for (var value in data.reason) {
+            if(value == 'data.oko'){
+              $('#screen-alt').append('<img src="assets/oko.png" class="logo" />');
+            }else{
+              if(data.reason[value] == -1){
+                $('#screen-alt').append('<h1 style="color: green;">+ '+value.substring(5, value.length)+'</h1>');
+              }else{
+                $('#screen-alt').append('<h1 style="color: red;">- '+value.substring(5, value.length)+'</h1>');
+              }
+
+            }
+          }
+
 
           $('#screen').hide();
           $('#screen-alt').show();
 
-          //$('#background').css('background', '#fff');
+          setTimeout(function(){
+            $('body').css('background', '#fff');
+            $('#screen').show();
+            $('#screen-alt').hide();
 
-          // $('img[src="assets/oko.png"]').animate({
-          //   width: 400
-          // }, 4000, function(){
-          //   $(this).animate({
-          //     width: 100
-          //   }, 4000, function(){
-          //     $('#background').css('background', 'none');
-          //   });
-          // });
+          }, 5000);
 
+        }else{
+          $('body').css('background', '#000');
 
+          $('#screen-alt').html('<img src="assets/'+data.direction+'.png" class="arrow" />').css('text-align', 'center');
 
+          $('#screen').hide();
+          $('#screen-alt').show();
+
+          setTimeout(function(){
+            $('body').css('background', '#fff');
+            $('#screen').show();
+            $('#screen-alt').hide();
+
+          }, 5000);
         }
+
+
 
       });
 
